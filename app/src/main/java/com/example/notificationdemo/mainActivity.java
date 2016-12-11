@@ -11,17 +11,23 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
-public class mainActivity extends AppCompatActivity implements View.OnClickListener{
+public class mainActivity extends AppCompatActivity implements View.OnClickListener {
 
-
+    final static String TAG = "##mainActivity";
     private TService.MyBinder myBinder;
 
     private ServiceConnection connection = new ServiceConnection() {
@@ -51,6 +57,20 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
         Button unbindService = (Button) findViewById(R.id.unbind_service);
         bindService.setOnClickListener(this);
         unbindService.setOnClickListener(this);
+        Switch sw = (Switch) findViewById(R.id.switch1);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Intent intent = new Intent(mainActivity.this,SetAlarmService.class);
+//                Log.d(TAG, intent.getAction());
+                if(b){
+                    startService(intent);
+                } else {
+                    stopService(intent);
+                }
+
+            }
+        });
 
     }
 
@@ -58,20 +78,7 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button:
-                final int notifyID = 3; // 通知的識別號碼
-                final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); // 取得系統的通知服務
-                // 建立通知
-                final Notification notification = new Notification.Builder(getApplicationContext())
-                                                                .setSmallIcon(R.mipmap.ic_launcher)
-                                                                .setContentTitle("內容標題")
-                                                                .setContentText("內容文字").build();
-                notificationManager.notify(notifyID, notification); // 發送通知
-                Calendar cal = Calendar.getInstance(Locale.getDefault());
-                System.out.println(cal.getTime().toString());
-                Date date = new Date();
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd:HH-mm-ss",Locale.getDefault());
-                String current = df.format(date);
-                System.out.println(current);
+
                 break;
 
             case R.id.startService:

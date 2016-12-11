@@ -10,20 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <receiver android:enabled="true" android:name=".BootCompleteReceiver">
+        <receiver android:enabled="true" android:name=".EventReceiver">
             <intent-filter>
+                <action android:name="ACTION_MY_BROADCAST" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".PlayReceiver" android:enabled="true">
-            <intent-filter>
-                <action android:name="my_notification" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".MyService" />
         <service android:name=".SetAlarmService" />
         <service android:name=".TService" />
 
