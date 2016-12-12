@@ -5,8 +5,8 @@
     <item
         android:id="@+id/menu_settings"
         android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="Settings"
+        app:showAsAction="ifRoom|withText"
+        android:title="偏好設定"
         android:icon="@android:drawable/ic_menu_preferences"/>
 
 </menu>
