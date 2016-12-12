@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Settings">
+        <CheckBoxPreference
+            android:key="notice"
+            android:defaultValue="true"
+            android:title="提醒功能"
+            android:summary="提醒您記帳" />
+    </PreferenceCategory>
+</PreferenceScreen>

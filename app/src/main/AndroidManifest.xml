@@ -19,7 +19,6 @@
         </receiver>
 
         <service android:name=".SetAlarmService" />
-        <service android:name=".TService" />
 
         <activity
             android:name=".mainActivity"
@@ -31,6 +30,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".UserSettingActivity" />
     </application>
 
 </manifest>

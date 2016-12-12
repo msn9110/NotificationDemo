@@ -1,47 +1,24 @@
 package com.example.notificationdemo;
 
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class mainActivity extends AppCompatActivity implements View.OnClickListener {
 
     final static String TAG = "##mainActivity";
-    private TService.MyBinder myBinder;
 
-    private ServiceConnection connection = new ServiceConnection() {
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            myBinder = (TService.MyBinder) service;
-            myBinder.startDownload();
-        }
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,54 +26,55 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnNotice = (Button)findViewById(R.id.button);
         btnNotice.setOnClickListener(this);
-        Button btnStart = (Button)findViewById(R.id.startService);
-        btnStart.setOnClickListener(this);
-        Button btnStop = (Button)findViewById(R.id.stopService);
-        btnStop.setOnClickListener(this);
-        Button bindService = (Button) findViewById(R.id.bind_service);
-        Button unbindService = (Button) findViewById(R.id.unbind_service);
-        bindService.setOnClickListener(this);
-        unbindService.setOnClickListener(this);
-        Switch sw = (Switch) findViewById(R.id.switch1);
-        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Intent intent = new Intent(mainActivity.this,SetAlarmService.class);
-//                Log.d(TAG, intent.getAction());
-                if(b){
-                    startService(intent);
-                } else {
-                    stopService(intent);
-                }
-
-            }
-        });
+        setPreference();
 
     }
+
+    private void setPreference(){
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean b = sharedPrefs.getBoolean("notice",false);
+        Intent intent = new Intent(mainActivity.this,SetAlarmService.class);
+        if(b){
+            startService(intent);
+        } else {
+            stopService(intent);
+        }
+    }
+
+    private static final int RESULT_SETTINGS = 1;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.menu_settings:
+                Intent i = new Intent(this, UserSettingActivity.class);
+                startActivityForResult(i, RESULT_SETTINGS);
+                break;
+
+        }
+
+        return true;
+    }
+
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button:
-
-                break;
-
-            case R.id.startService:
-                Intent intent = new Intent(this,TService.class);
-                startService(intent);
-                break;
-
-            case R.id.stopService:
-                intent = new Intent(this,TService.class);
-                stopService(intent);
-                break;
-
-            case R.id.bind_service:
-                Intent bindIntent = new Intent(this, TService.class);
-                bindService(bindIntent, connection, BIND_AUTO_CREATE);
-                break;
-            case R.id.unbind_service:
-                unbindService(connection);
+                final int notifyID = 1;
+                final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); // 取得系統的通知服務
+                // 建立通知
+                final Notification notification = new Notification.Builder(getApplicationContext())
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("NotificationDemo")
+                        .setContentText("該記帳囉").build();
+                notificationManager.notify(notifyID, notification); // 發送通知
                 break;
         }
     }

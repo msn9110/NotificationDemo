@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 
@@ -20,8 +22,13 @@ public class EventReceiver extends BroadcastReceiver {
             case Intent.ACTION_BOOT_COMPLETED:
                 Log.d(TAG, "BOOT COMPLETE");
                 //here we start the service
-                Intent serviceIntent = new Intent(context, SetAlarmService.class);
-                context.startService(serviceIntent);
+
+                SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                boolean needAlarm = sharedPrefs.getBoolean("notice",false);
+                if(needAlarm){
+                    Intent serviceIntent = new Intent(context, SetAlarmService.class);
+                    context.startService(serviceIntent);
+                }
                 break;
             case SetAlarmService.ACTION_BROADCAST:
                 final int notifyID = 3;

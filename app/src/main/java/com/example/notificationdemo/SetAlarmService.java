@@ -33,15 +33,16 @@ public class SetAlarmService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG, "onCreate() executed");
+        if(doInBackground == null){
+            doInBackground = new Thread(runnable);
+            doInBackground.start();
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand() executed");
-        if(doInBackground == null){
-            doInBackground = new Thread(runnable);
-            doInBackground.start();
-        }
         return super.onStartCommand(intent, flags, startId);
     }
 
