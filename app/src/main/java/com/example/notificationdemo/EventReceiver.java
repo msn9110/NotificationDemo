@@ -22,7 +22,6 @@ public class EventReceiver extends BroadcastReceiver {
             case Intent.ACTION_BOOT_COMPLETED:
                 Log.d(TAG, "BOOT COMPLETE");
                 //here we start the service
-//
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
                 boolean needAlarm = sharedPrefs.getBoolean("notice",true);
                 if(needAlarm){
