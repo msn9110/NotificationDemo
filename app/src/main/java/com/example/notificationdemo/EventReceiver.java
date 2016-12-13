@@ -24,7 +24,7 @@ public class EventReceiver extends BroadcastReceiver {
                 //here we start the service
 
                 SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-                boolean needAlarm = sharedPrefs.getBoolean("notice",false);
+                boolean needAlarm = sharedPrefs.getBoolean("notice",true);
                 if(needAlarm){
                     Intent serviceIntent = new Intent(context, SetAlarmService.class);
                     context.startService(serviceIntent);

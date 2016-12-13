@@ -36,10 +36,7 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setPreference(){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPrefs.edit()
-                .putBoolean("notice",true)
-                .apply();
-        boolean b = sharedPrefs.getBoolean("notice",false);
+        boolean b = sharedPrefs.getBoolean("notice",true);
         Intent intent = new Intent(mainActivity.this,SetAlarmService.class);
         if(b){
             startService(intent);
