@@ -12,22 +12,21 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 
-import com.gerli.handsomeboy.*;
 import com.gerli.handsomeboy.gerlisqlitedemo.GerliDatabaseManager;
 
 
 public class SetAlarmService extends Service {
     final static String TAG = "##SetAlarmService";
-    final static int MORNING = 11;
-    final static int AFTERNOON = 17;
+    final static int MORNING = 10;
+    final static int AFTERNOON = 21;
     final static int NIGHT = 22;
     public final static String ACTION_BROADCAST = "ACTION_MY_BROADCAST";
     final static ArrayList<Integer> alarmHour = new ArrayList<>(Arrays.asList(MORNING, AFTERNOON, NIGHT)) ;
-    final static int alarmMinute = 30;;
+    final static int alarmMinute = 10;
+    final static int alarmSecond = 0;
     Thread doInBackground;
-    long today, morning, afternoon, night;
+    long today, morning, afternoon, midnight;
 
     GerliDatabaseManager manager;
 
@@ -78,9 +77,10 @@ public class SetAlarmService extends Service {
                 cal.add(Calendar.MINUTE, 1);
                 int alarmH = cal.get(Calendar.HOUR_OF_DAY);
                 int alarmMin = cal.get(Calendar.MINUTE);
-                int seconds = cal.get(Calendar.SECOND);
+                int alarmSec = cal.get(Calendar.SECOND);
                 //Log.d(TAG, String.valueOf(alarmH) + ":" +String.valueOf(alarmMin));
-                if(alarmHour.contains(alarmH) && alarmMinute == alarmMin && seconds == 0 /**/&& !hasDone(cal.getTimeInMillis()) /**/){
+                if(alarmHour.contains(alarmH) && alarmMinute == alarmMin && alarmSecond == alarmSec
+                        /**/&& !hasDone(cal.getTimeInMillis()) /**/) {
                     Log.d(TAG, "SetAlarm");
                     Intent intent = new Intent(ACTION_BROADCAST);
 
@@ -102,13 +102,13 @@ public class SetAlarmService extends Service {
         boolean done = false;
         int mode = 0;
         long base = 0;
-        if(today <= currentTime && currentTime < morning){
+        if(today <= currentTime && currentTime <= morning){
             mode = 1;
             base = today;
-        } else if(morning <= currentTime && currentTime < afternoon){
+        } else if(morning < currentTime && currentTime <= afternoon){
             mode = 2;
             base = morning;
-        } else if(afternoon <= currentTime && currentTime < night){
+        } else if(afternoon < currentTime && currentTime <= midnight){
             mode = 3;
             base = afternoon;
         }
@@ -126,17 +126,24 @@ public class SetAlarmService extends Service {
     }
 
     private void setTimes(){
-        Date mtoday = new Date();
-        mtoday.setSeconds(0);
-        mtoday.setMinutes(0);
-        mtoday.setHours(0);
-        today = mtoday.getTime();
-        mtoday.setMinutes(alarmMinute);
-        mtoday.setHours(MORNING);
-        morning = mtoday.getTime();
-        mtoday.setHours(AFTERNOON);
-        afternoon = mtoday.getTime();
-        mtoday.setHours(NIGHT);
-        night = mtoday.getTime();
+        Calendar calendar = Calendar.getInstance();
+        //TODAY in long represent
+        calendar.clear(Calendar.MILLISECOND);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.HOUR_OF_DAY);
+        today = calendar.getTimeInMillis();
+        //TODAY MORNING in long represent
+        calendar.set(Calendar.HOUR_OF_DAY,MORNING);
+        morning = calendar.getTimeInMillis();
+        //TODAY AFTERNOON in long represent
+        calendar.set(Calendar.HOUR_OF_DAY,AFTERNOON);
+        afternoon = calendar.getTimeInMillis();
+        //TODAY NIGHT in long represent
+        calendar.set(Calendar.MILLISECOND,999);
+        calendar.set(Calendar.SECOND,59);
+        calendar.set(Calendar.MINUTE,59);
+        calendar.set(Calendar.HOUR_OF_DAY,23);
+        midnight = calendar.getTimeInMillis();
     }
 }

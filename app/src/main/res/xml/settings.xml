@@ -3,7 +3,7 @@
     <PreferenceCategory android:title="Settings">
         <CheckBoxPreference
             android:key="notice"
-            android:defaultValue="true"
+            android:defaultValue="@string/YES"
             android:title="提醒功能"
             android:summary="提醒您記帳" />
     </PreferenceCategory>

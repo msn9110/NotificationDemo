@@ -271,16 +271,18 @@ public class GerliDatabaseManager {
                 " LIMIT " + 1 ,null);
 
 
-        cursor.moveToFirst();
-        String timeStr = cursor.getString(0);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        Date data;
-        try{
-            data = format.parse(timeStr);
-            TimeZone.setDefault(TimeZone.getTimeZone("Asia/Taipei"));
-        }catch (ParseException e){
-            Log.d("DatabaseError","getLatestRecordTime : SimpleDateFormat parse error");
-            return null;
+        Date data = new Date(0);
+        if(cursor.getCount() > 0){
+            cursor.moveToFirst();
+            String timeStr = cursor.getString(0);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+            try{
+                data = format.parse(timeStr);
+                TimeZone.setDefault(TimeZone.getTimeZone("Asia/Taipei"));
+            }catch (ParseException e){
+                Log.d("DatabaseError","getLatestRecordTime : SimpleDateFormat parse error");
+            }
         }
 
         return data;

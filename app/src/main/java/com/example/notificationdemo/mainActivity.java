@@ -15,15 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.gerli.handsomeboy.gerlisqlitedemo.GerliDatabaseManager;
+
 public class mainActivity extends AppCompatActivity implements View.OnClickListener {
 
     final static String TAG = "##mainActivity";
+    GerliDatabaseManager gerliDatabaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        gerliDatabaseManager=new GerliDatabaseManager(this);
         Button btnNotice = (Button)findViewById(R.id.button);
         btnNotice.setOnClickListener(this);
         setPreference();
@@ -32,6 +36,9 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setPreference(){
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPrefs.edit()
+                .putBoolean("notice",true)
+                .apply();
         boolean b = sharedPrefs.getBoolean("notice",false);
         Intent intent = new Intent(mainActivity.this,SetAlarmService.class);
         if(b){
@@ -67,6 +74,7 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button:
+                /*
                 final int notifyID = 1;
                 final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); // 取得系統的通知服務
                 // 建立通知
@@ -75,6 +83,8 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
                         .setContentTitle("NotificationDemo")
                         .setContentText("該記帳囉").build();
                 notificationManager.notify(notifyID, notification); // 發送通知
+                */
+                Log.d(TAG,gerliDatabaseManager.getLatestRecordTime().toString());
                 break;
         }
     }
