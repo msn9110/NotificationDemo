@@ -18,12 +18,12 @@ import com.gerli.handsomeboy.gerlisqlitedemo.GerliDatabaseManager;
 
 public class SetAlarmService extends Service {
     final static String TAG = "##SetAlarmService";
-    final static int MORNING = 10;
+    final static int MORNING = 11;
     final static int AFTERNOON = 21;
     final static int NIGHT = 22;
     public final static String ACTION_BROADCAST = "ACTION_MY_BROADCAST";
     final static ArrayList<Integer> alarmHour = new ArrayList<>(Arrays.asList(MORNING, AFTERNOON, NIGHT)) ;
-    final static int alarmMinute = 10;
+    final static int alarmMinute = 20;
     final static int alarmSecond = 0;
     Thread doInBackground;
     long today, morning, afternoon, midnight;
@@ -108,7 +108,7 @@ public class SetAlarmService extends Service {
         } else if(morning < currentTime && currentTime <= afternoon){
             mode = 2;
             base = morning;
-        } else if(afternoon < currentTime && currentTime <= midnight){
+        } else if(afternoon < currentTime && currentTime < midnight){
             mode = 3;
             base = afternoon;
         }
@@ -122,6 +122,8 @@ public class SetAlarmService extends Service {
                     done = true;
                 break;
         }
+        System.out.println(mode);
+        System.out.println(done);
         return done;
     }
 
@@ -140,10 +142,6 @@ public class SetAlarmService extends Service {
         calendar.set(Calendar.HOUR_OF_DAY,AFTERNOON);
         afternoon = calendar.getTimeInMillis();
         //TODAY NIGHT in long represent
-        calendar.set(Calendar.MILLISECOND,999);
-        calendar.set(Calendar.SECOND,59);
-        calendar.set(Calendar.MINUTE,59);
-        calendar.set(Calendar.HOUR_OF_DAY,23);
-        midnight = calendar.getTimeInMillis();
+        midnight = + 86400000;
     }
 }
