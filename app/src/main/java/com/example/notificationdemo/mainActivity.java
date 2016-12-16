@@ -17,6 +17,8 @@ import android.widget.Button;
 
 import com.gerli.handsomeboy.gerlisqlitedemo.GerliDatabaseManager;
 
+import java.util.Calendar;
+
 public class mainActivity extends AppCompatActivity implements View.OnClickListener {
 
     final static String TAG = "##mainActivity";
@@ -81,6 +83,16 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
                         .setContentText("該記帳囉").build();
                 notificationManager.notify(notifyID, notification); // 發送通知
                 */
+                Calendar calendar = Calendar.getInstance();
+                //TODAY in long represent
+                calendar.clear(Calendar.MILLISECOND);
+                calendar.clear(Calendar.SECOND);
+                calendar.clear(Calendar.MINUTE);
+                calendar.clear(Calendar.HOUR_OF_DAY);
+                System.out.println(calendar.getTime().toString());
+                //TODAY MORNING in long represent
+                calendar.set(Calendar.HOUR_OF_DAY,22);
+                System.out.println(calendar.getTime().toString());
                 Log.d(TAG,gerliDatabaseManager.getLatestRecordTime().toString());
                 break;
         }
