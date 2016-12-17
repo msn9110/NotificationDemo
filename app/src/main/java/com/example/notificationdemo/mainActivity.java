@@ -59,7 +59,7 @@ public class mainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()) {
 
             case R.id.menu_settings:
-                Intent i = new Intent(this, UserSettingActivity.class);
+                Intent i = new Intent(this, settingActivity.class);
                 startActivityForResult(i, RESULT_SETTINGS);
                 break;
 

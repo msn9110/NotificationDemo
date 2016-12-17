@@ -1,23 +1,26 @@
 package com.example.notificationdemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 
-public class UserSettingActivity extends PreferenceActivity implements Preference.OnPreferenceChangeListener{
+public class PrefFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener{
 
     // 加入欄位變數宣告
     private SharedPreferences sharedPreferences;
     private CheckBoxPreference defaultNotice;
+    Context mContext;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = getActivity().getApplicationContext();
 
         addPreferencesFromResource(R.xml.settings);
 
@@ -25,12 +28,12 @@ public class UserSettingActivity extends PreferenceActivity implements Preferenc
         defaultNotice.setOnPreferenceChangeListener(this);
 
         // 建立SharedPreferences物件
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         boolean alarmService = sharedPreferences.getBoolean("notice",false);
@@ -43,11 +46,11 @@ public class UserSettingActivity extends PreferenceActivity implements Preferenc
         switch (preference.getKey()){
             case "notice":
                 boolean b = !sharedPreferences.getBoolean("notice",false);
-                Intent intent  = new Intent(this,SetAlarmService.class);
+                Intent intent  = new Intent(mContext,SetAlarmService.class);
                 if(b){
-                    startService(intent);
+                    mContext.startService(intent);
                 } else {
-                    stopService(intent);
+                    mContext.stopService(intent);
                 }
                 defaultNotice.setChecked(b);
                 sharedPreferences.edit()
