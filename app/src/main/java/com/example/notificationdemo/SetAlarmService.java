@@ -19,10 +19,10 @@ import com.gerli.handsomeboy.gerlisqlitedemo.GerliDatabaseManager;
 public class SetAlarmService extends Service {
     final static String TAG = "##SetAlarmService";
     final static int MORNING = 11;
-    final static int AFTERNOON = 21;
+    final static int AFTERNOON = 17;
     final static int NIGHT = 22;
     public final static String ACTION_BROADCAST = "ACTION_MY_BROADCAST";
-    final static ArrayList<Integer> alarmHour = new ArrayList<>(Arrays.asList(MORNING, AFTERNOON, NIGHT)) ;
+    final static ArrayList<Integer> alarmHour = new ArrayList<>(Arrays.asList(9,10,MORNING, AFTERNOON, NIGHT)) ;
     final static int alarmMinute = 10;
     final static int alarmSecond = 0;
     Thread doInBackground;
